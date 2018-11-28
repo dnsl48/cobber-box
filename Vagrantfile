@@ -8,10 +8,11 @@ Vagrant.configure("2") do |config|
 
   config.ssh.forward_agent = true
 
-  config.vagrant.plugins = {"vagrant-nfs_guest" => {"version" => "1.0.0"}, ## 1.0.2 and 1.0.3 are buggy and do not work on CentOS
-                            #                            "landrush" => {"version" => "1.3.0"},
-                            "vagrant-disksize" => {"version" => "0.1.3" }
-                           }
+  config.vagrant.plugins =
+    { "vagrant-nfs_guest" => {"version" => "1.0.0"}   ## 1.0.2 and 1.0.3 are buggy and do not work on CentOS
+    # , "landrush" => {"version" => "1.3.0"}
+    , "vagrant-disksize" => { "version" => "0.1.3" }
+    }
 
   # config.vm.synced_folder '~/.gitconfig', '/home/vagrant/.gitconfig'
   config.vm.synced_folder 'docker/', '/home/vagrant/docker'

@@ -1,0 +1,9 @@
+version: '2.4'
+
+services:
+  proxey:
+    network_mode: host
+    image: nginx:1-alpine
+    volumes:
+      - "../configs/nginx/conf.d:/etc/nginx/conf.d"
+    

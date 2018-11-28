@@ -1,0 +1,15 @@
+FROM alpine
+
+RUN apk update && apk add nmap-ncat
+
+ARG PORT_IN=9000
+ARG PORT_OUT=9000
+ARG HOST_IN=0.0.0.0
+ARG HOST_OUT
+
+ENV PORT_IN $PORT_IN
+ENV HOST_IN $HOST_IN
+ENV PORT_OUT $PORT_OUT
+ENV HOST_OUT $HOST_OUT
+
+ENTRYPOINT /usr/bin/ncat -vv -lk $HOST_IN $PORT_IN -c "/usr/bin/ncat $HOST_OUT $PORT_OUT"

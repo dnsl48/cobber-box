@@ -1,0 +1,74 @@
+version: '2.4'
+
+services:
+  postgres94:
+    image: postgres:9.4
+
+    env_file:
+      - ../configs/postgres/.env
+    ports:
+      - "5494:5432"
+
+  psql94:
+    image: postgres:9.4
+    env_file:
+      - ../configs/postgres/.env
+    command:
+      "psql -h postgres94 -U postgres"
+
+
+  postgres95:
+    image: postgres:9.5
+    env_file:
+      - ../configs/postgres/.env
+    ports:
+      - "5495:5432"
+
+  psql95:
+    image: postgres:9.5
+    env_file:
+      - ../configs/postgres/.env
+    command:
+      "psql -h postgres95 -U postgres"
+
+  postgres96:
+    image: postgres:9.6
+    env_file:
+      - ../configs/postgres/.env
+    ports:
+      - "5496:5432"
+
+  psql96:
+    image: postgres:9.6
+    env_file:
+      - ../configs/postgres/.env
+    command:
+      "psql -h postgres96 -U postgres"
+
+  postgres10:
+    image: postgres:10
+    env_file:
+      - ../configs/postgres/.env
+    ports:
+      - "5410:5432"
+
+  psql10:
+    image: postgres:10
+    env_file:
+      - ../configs/postgres/.env
+    command:
+      "psql -h postgres10 -U postgres"
+
+  postgres11:
+    image: postgres:11
+    env_file:
+      - ../configs/postgres/.env
+    ports:
+      - "5411:5432"
+
+  psql11:
+    image: postgres:11
+    env_file:
+      - ../configs/postgres/.env
+    command:
+      "psql -h postgres11 -U postgres"

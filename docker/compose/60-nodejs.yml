@@ -1,0 +1,15 @@
+version: '2.4'
+
+
+services:
+  node10:
+    build:
+      context: ../service/node10
+      target: dev
+
+    volumes:
+      - "../../bench:/mnt/bench"
+      - "/home/vagrant/.cache/yarn:/home/vagrant/.cache/yarn"
+      - "/home/vagrant/.cache/.npm:/home/vagrant/.cache/npm-cache"
+
+    working_dir: "/mnt"

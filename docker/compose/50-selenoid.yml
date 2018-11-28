@@ -1,0 +1,16 @@
+version: '2.4'
+
+services:
+  chrome:
+    network_mode: host
+    image: selenoid/chrome
+    init: true
+    cap_add:
+      - ALL
+
+  # firefox:
+  #   network_mode: host
+  #   image: selenoid/firefox
+  #   init: true
+  #   cap_add:
+  #     - ALL

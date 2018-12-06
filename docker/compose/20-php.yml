@@ -1,5 +1,54 @@
 version: '2.4'
 
+x-working-dir: &working-dir '/mnt/bench'
+
+# CLI
+x-volumes: &volumes
+  - "../../bench:/mnt/bench"
+  - "~/.bashrc:/home/vagrant/.bashrc"
+  - "~/.bash_profile:/home/vagrant/.bash_profile"
+  - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
+  - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
+  - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
+
+
+# CLI tests (with inactive xdebug)
+x-volumes-t: &volumes-t
+  - "../../bench:/mnt/bench"
+  - "~/.bashrc:/home/vagrant/.bashrc"
+  - "~/.bash_profile:/home/vagrant/.bash_profile"
+  - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
+  - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
+  - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
+  - "../configs/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
+
+
+# CLI debug (with active xdebug)
+x-volumes-x: &volumes-x
+  - "../../bench:/mnt/bench"
+  - "~/.bashrc:/home/vagrant/.bashrc"
+  - "~/.bash_profile:/home/vagrant/.bash_profile"
+  - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
+  - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
+  - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
+  - "../configs/php/xdebug-cli.ini:/usr/local/etc/php/conf.d/xdebug.ini"
+
+
+# Apache
+x-volumes-a: &volumes-a
+  - "../../bench:/var/www/html"
+  - "../configs/httpd/sites-enabled:/etc/apache2/sites-enabled"
+  - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
+  - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
+
+# Apache with xdebug
+x-volumes-ax: &volumes-ax
+  - "../../bench:/var/www/html"
+  - "../configs/httpd/sites-enabled:/etc/apache2/sites-enabled"
+  - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
+  - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
+  - "../configs/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
+
 
 services:
   xdebug:
@@ -18,49 +67,23 @@ services:
     build:
       context: ../service/php56/cli
       target: dev
-    volumes:
-      - "../../bench:/mnt/bench"
-      - "~/.bashrc:/home/vagrant/.bashrc"
-      - "~/.bash_profile:/home/vagrant/.bash_profile"
-      - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-    working_dir: "/mnt"
-
+    volumes: *volumes
+    working_dir: *working-dir
 
   php56t:
     build:
       context: ../service/php56/cli
       target: debug
-
-    networks:
-      - default
-      - behat
-
-    volumes:
-      - "../../bench:/mnt/bench"
-      - "~/.bashrc:/home/vagrant/.bashrc"
-      - "~/.bash_profile:/home/vagrant/.bash_profile"
-      - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-      - "../configs/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
-    working_dir: "/mnt"
+    volumes: *volumes-t
+    working_dir: *working-dir
 
 
   php56x:
     build:
       context: ../service/php56/cli
       target: debug
-    volumes:
-      - "../../bench:/mnt/bench"
-      - "~/.bashrc:/home/vagrant/.bashrc"
-      - "~/.bash_profile:/home/vagrant/.bash_profile"
-      - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-      - "../configs/php/xdebug-cli.ini:/usr/local/etc/php/conf.d/xdebug.ini"
-    working_dir: "/mnt"
+    volumes: *volumes-x
+    working_dir: *working-dir
 
   php56a:
     build:
@@ -68,11 +91,7 @@ services:
       target: base
     ports:
       - "8560:80"
-    volumes:
-      - "../../bench:/var/www/html"
-      - "../configs/httpd/sites-enabled:/etc/apache2/sites-enabled"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
+    volumes: *volumes-a
 
   php56ax:
     build:
@@ -80,12 +99,8 @@ services:
       target: debug
     ports:
       - "8561:80"
-    volumes:
-      - "../../bench:/var/www/html"
-      - "../configs/httpd/sites-enabled:/etc/apache2/sites-enabled"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-      - "../configs/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
+    volumes: *volumes-ax
+
 
   php70a:
     build:
@@ -93,11 +108,7 @@ services:
       target: base
     ports:
       - "8700:80"
-    volumes:
-      - "../../bench:/var/www/html"
-      - "../configs/httpd/sites-enabled:/etc/apache2/sites-enabled"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
+    volumes: *volumes-a
 
   php70ax:
     build:
@@ -105,56 +116,28 @@ services:
       target: debug
     ports:
       - "8701:80"
-    volumes:
-      - "../../bench:/var/www/html"
-      - "../configs/httpd/sites-enabled:/etc/apache2/sites-enabled"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-      - "../configs/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
+    volumes: *volumes-ax
 
   php70:
     build:
       context: ../service/php70/cli
       target: dev
-    volumes:
-      - "../../bench:/mnt/bench"
-      - "~/.bashrc:/home/vagrant/.bashrc"
-      - "~/.bash_profile:/home/vagrant/.bash_profile"
-      - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-    working_dir: "/mnt"
-
+    volumes: *volumes
+    working_dir: *working-dir
 
   php70t:
     build:
       context: ../service/php70/cli
       target: debug
-    volumes:
-      - "../../bench:/mnt/bench"
-      - "~/.bashrc:/home/vagrant/.bashrc"
-      - "~/.bash_profile:/home/vagrant/.bash_profile"
-      - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-      - "../configs/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
-    working_dir: "/mnt"
-
+    volumes: *volumes-t
+    working_dir: *working-dir
 
   php70x:
     build:
       context: ../service/php70/cli
       target: debug
-    volumes:
-      - "../../bench:/mnt/bench"
-      - "~/.bashrc:/home/vagrant/.bashrc"
-      - "~/.bash_profile:/home/vagrant/.bash_profile"
-      - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-      - "../configs/php/xdebug-cli.ini:/usr/local/etc/php/conf.d/xdebug.ini"
-    working_dir: "/mnt"
-
+    volumes: *volumes-x
+    working_dir: *working-dir
 
   php71a:
     build:
@@ -162,12 +145,7 @@ services:
       target: base
     ports:
       - "8710:80"
-    volumes:
-      - "../../bench:/var/www/html"
-      - "../configs/httpd/sites-enabled:/etc/apache2/sites-enabled"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-
+    volumes: *volumes-a
 
   php71ax:
     build:
@@ -175,59 +153,28 @@ services:
       target: debug
     ports:
       - "8711:80"
-    volumes:
-      - "../../bench:/var/www/html"
-      - "../configs/httpd/sites-enabled:/etc/apache2/sites-enabled"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-      - "../configs/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
-
+    volumes: *volumes-ax
 
   php71:
     build:
       context: ../service/php71/cli
       target: dev
-    volumes:
-      - "../../bench:/mnt/bench"
-      - "~/.bashrc:/home/vagrant/.bashrc"
-      - "~/.bash_profile:/home/vagrant/.bash_profile"
-      - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-    working_dir: "/mnt"
-
+    volumes: *volumes
+    working_dir: *working-dir
 
   php71t:
     build:
       context: ../service/php71/cli
       target: debug
-    volumes:
-      - "../../bench:/mnt/bench"
-      - "~/.bashrc:/home/vagrant/.bashrc"
-      - "~/.bash_profile:/home/vagrant/.bash_profile"
-      - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-      - "../configs/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
-    working_dir: "/mnt"
-
+    volumes: *volumes-t
+    working_dir: *working-dir
 
   php71x:
     build:
       context: ../service/php71/cli
       target: debug
-    volumes:
-      - "../../bench:/mnt/bench"
-      - "~/.bashrc:/home/vagrant/.bashrc"
-      - "~/.bash_profile:/home/vagrant/.bash_profile"
-      - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-      - "../configs/php/xdebug-cli.ini:/usr/local/etc/php/conf.d/xdebug.ini"
-    working_dir: "/mnt"
-
-
-      
+    volumes: *volumes-x
+    working_dir: *working-dir
 
   php72a:
     build:
@@ -235,11 +182,7 @@ services:
       target: base
     ports:
       - "8720:80"
-    volumes:
-      - "../../bench:/var/www/html"
-      - "../configs/httpd/sites-enabled:/etc/apache2/sites-enabled"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
+    volumes: *volumes-a
 
   php72ax:
     build:
@@ -247,53 +190,25 @@ services:
       target: debug
     ports:
       - "8721:80"
-    volumes:
-      - "../../bench:/var/www/html"
-      - "../configs/httpd/sites-enabled:/etc/apache2/sites-enabled"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-      - "../configs/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
-
+    volumes: *volumes-ax
 
   php72:
     build:
       context: ../service/php72/cli
       target: dev
-    volumes:
-      - "../../bench:/mnt/bench"
-      - "~/.bashrc:/home/vagrant/.bashrc"
-      - "~/.bash_profile:/home/vagrant/.bash_profile"
-      - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-    working_dir: "/mnt"
-
+    volumes: *volumes
+    working_dir: *working-dir
 
   php72t:
     build:
       context: ../service/php72/cli
       target: debug
-    volumes:
-      - "../../bench:/mnt/bench"
-      - "~/.bashrc:/home/vagrant/.bashrc"
-      - "~/.bash_profile:/home/vagrant/.bash_profile"
-      - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-      - "../configs/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
-    working_dir: "/mnt"
-
+    volumes: *volumes-t
+    working_dir: *working-dir
 
   php72x:
     build:
       context: ../service/php72/cli
       target: debug
-    volumes:
-      - "../../bench:/mnt/bench"
-      - "~/.bashrc:/home/vagrant/.bashrc"
-      - "~/.bash_profile:/home/vagrant/.bash_profile"
-      - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
-      - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
-      - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-      - "../configs/php/xdebug-cli.ini:/usr/local/etc/php/conf.d/xdebug.ini"
-    working_dir: "/mnt"
+    volumes: *volumes-x
+    working_dir: *working-dir

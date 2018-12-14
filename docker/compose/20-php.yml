@@ -1,10 +1,10 @@
 version: '2.4'
 
-x-working-dir: &working-dir '/mnt/bench'
+x-working-dir: &working-dir '/home/vagrant/bench'
 
 # CLI
 x-volumes: &volumes
-  - "../../bench:/mnt/bench"
+  - "../../bench:/home/vagrant/bench"
   - "~/.bashrc:/home/vagrant/.bashrc"
   - "~/.bash_profile:/home/vagrant/.bash_profile"
   - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
@@ -14,7 +14,7 @@ x-volumes: &volumes
 
 # CLI tests (with inactive xdebug)
 x-volumes-t: &volumes-t
-  - "../../bench:/mnt/bench"
+  - "../../bench:/home/vagrant/bench"
   - "~/.bashrc:/home/vagrant/.bashrc"
   - "~/.bash_profile:/home/vagrant/.bash_profile"
   - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
@@ -22,10 +22,9 @@ x-volumes-t: &volumes-t
   - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
   - "../configs/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
 
-
 # CLI debug (with active xdebug)
 x-volumes-x: &volumes-x
-  - "../../bench:/mnt/bench"
+  - "../../bench:/home/vagrant/bench"
   - "~/.bashrc:/home/vagrant/.bashrc"
   - "~/.bash_profile:/home/vagrant/.bash_profile"
   - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
@@ -89,6 +88,7 @@ services:
     build:
       context: ../service/php56/apache
       target: base
+    restart: always
     ports:
       - "8560:80"
     volumes: *volumes-a
@@ -97,6 +97,7 @@ services:
     build:
       context: ../service/php56/apache
       target: debug
+    restart: always
     ports:
       - "8561:80"
     volumes: *volumes-ax
@@ -106,6 +107,7 @@ services:
     build:
       context: ../service/php70/apache
       target: base
+    restart: always
     ports:
       - "8700:80"
     volumes: *volumes-a
@@ -114,6 +116,7 @@ services:
     build:
       context: ../service/php70/apache
       target: debug
+    restart: always
     ports:
       - "8701:80"
     volumes: *volumes-ax
@@ -143,6 +146,7 @@ services:
     build:
       context: ../service/php71/apache
       target: base
+    restart: always
     ports:
       - "8710:80"
     volumes: *volumes-a
@@ -151,6 +155,7 @@ services:
     build:
       context: ../service/php71/apache
       target: debug
+    restart: always
     ports:
       - "8711:80"
     volumes: *volumes-ax
@@ -180,6 +185,7 @@ services:
     build:
       context: ../service/php72/apache
       target: base
+    restart: always
     ports:
       - "8720:80"
     volumes: *volumes-a
@@ -188,6 +194,7 @@ services:
     build:
       context: ../service/php72/apache
       target: debug
+    restart: always
     ports:
       - "8721:80"
     volumes: *volumes-ax

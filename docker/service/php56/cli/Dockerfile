@@ -44,9 +44,6 @@ USER vagrant
 
 RUN mkdir -p /home/vagrant/.composer/cache/vcs/
 
-ENTRYPOINT /bin/bash
-
-
 
 FROM dev as debug
 

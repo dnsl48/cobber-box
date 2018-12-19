@@ -2,19 +2,17 @@ version: '2.4'
 
 
 networks:
-  behat:
-    name: behat
+  vagrant:
+    name: vagrant
     driver: bridge
     driver_opts:
-      com.docker.network.bridge.name: "behat"
+      com.docker.network.bridge.name: "vagrant"
 
     ipam:
       driver: default
       config:
-        - subnet: 192.168.4.0/24
-          gateway: 192.168.4.1
-          aux_addresses:
-            chrome: 192.168.4.1
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.1
 
   xdebug:
     name: xdebug

@@ -5,7 +5,6 @@ services:
     network_mode: host
     image: selenoid/chrome
     restart: always
-    init: true
     cap_add:
       - ALL
 

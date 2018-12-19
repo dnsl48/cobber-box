@@ -49,30 +49,44 @@ x-volumes-ax: &volumes-ax
   - "../configs/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
 
 
+x-networks: &networks
+  - default
+  - xdebug
+  - vagrant
+
+x-extra-hosts: &extra-hosts
+  - "vagrant:192.168.1.1"
+  - "xdebug:192.168.3.1"
+  - "chrome:192.168.1.1"
+
+
 services:
   xdebug:
     build:
       context: ../service/xdebug_proxy
       args:
-        HOST_OUT: 192.168.3.1
-
+        HOST_OUT: xdebug
     init: true
+    networks: *networks
+    extra_hosts: *extra-hosts
 
-    networks:
-      - default
-      - xdebug
 
   php56:
     build:
       context: ../service/php56/cli
       target: dev
+    networks: *networks
+    extra_hosts: *extra-hosts
     volumes: *volumes
     working_dir: *working-dir
+
 
   php56t:
     build:
       context: ../service/php56/cli
       target: debug
+    networks: *networks
+    extra_hosts: *extra-hosts
     volumes: *volumes-t
     working_dir: *working-dir
 
@@ -81,6 +95,8 @@ services:
     build:
       context: ../service/php56/cli
       target: debug
+    networks: *networks
+    extra_hosts: *extra-hosts
     volumes: *volumes-x
     working_dir: *working-dir
 
@@ -88,6 +104,9 @@ services:
     build:
       context: ../service/php56/apache
       target: base
+    networks: *networks
+    extra_hosts: *extra-hosts
+    init: true
     restart: always
     ports:
       - "8560:80"
@@ -97,6 +116,9 @@ services:
     build:
       context: ../service/php56/apache
       target: debug
+    networks: *networks
+    extra_hosts: *extra-hosts
+    init: true
     restart: always
     ports:
       - "8561:80"
@@ -107,6 +129,9 @@ services:
     build:
       context: ../service/php70/apache
       target: base
+    networks: *networks
+    extra_hosts: *extra-hosts
+    init: true
     restart: always
     ports:
       - "8700:80"
@@ -116,6 +141,9 @@ services:
     build:
       context: ../service/php70/apache
       target: debug
+    networks: *networks
+    extra_hosts: *extra-hosts
+    init: true
     restart: always
     ports:
       - "8701:80"
@@ -125,6 +153,8 @@ services:
     build:
       context: ../service/php70/cli
       target: dev
+    networks: *networks
+    extra_hosts: *extra-hosts
     volumes: *volumes
     working_dir: *working-dir
 
@@ -132,6 +162,8 @@ services:
     build:
       context: ../service/php70/cli
       target: debug
+    networks: *networks
+    extra_hosts: *extra-hosts
     volumes: *volumes-t
     working_dir: *working-dir
 
@@ -139,6 +171,8 @@ services:
     build:
       context: ../service/php70/cli
       target: debug
+    networks: *networks
+    extra_hosts: *extra-hosts
     volumes: *volumes-x
     working_dir: *working-dir
 
@@ -146,6 +180,9 @@ services:
     build:
       context: ../service/php71/apache
       target: base
+    networks: *networks
+    extra_hosts: *extra-hosts
+    init: true
     restart: always
     ports:
       - "8710:80"
@@ -155,6 +192,9 @@ services:
     build:
       context: ../service/php71/apache
       target: debug
+    networks: *networks
+    extra_hosts: *extra-hosts
+    init: true
     restart: always
     ports:
       - "8711:80"
@@ -164,6 +204,8 @@ services:
     build:
       context: ../service/php71/cli
       target: dev
+    networks: *networks
+    extra_hosts: *extra-hosts
     volumes: *volumes
     working_dir: *working-dir
 
@@ -171,6 +213,8 @@ services:
     build:
       context: ../service/php71/cli
       target: debug
+    networks: *networks
+    extra_hosts: *extra-hosts
     volumes: *volumes-t
     working_dir: *working-dir
 
@@ -178,6 +222,8 @@ services:
     build:
       context: ../service/php71/cli
       target: debug
+    networks: *networks
+    extra_hosts: *extra-hosts
     volumes: *volumes-x
     working_dir: *working-dir
 
@@ -185,6 +231,9 @@ services:
     build:
       context: ../service/php72/apache
       target: base
+    networks: *networks
+    extra_hosts: *extra-hosts
+    init: true
     restart: always
     ports:
       - "8720:80"
@@ -194,6 +243,9 @@ services:
     build:
       context: ../service/php72/apache
       target: debug
+    networks: *networks
+    extra_hosts: *extra-hosts
+    init: true
     restart: always
     ports:
       - "8721:80"
@@ -203,6 +255,8 @@ services:
     build:
       context: ../service/php72/cli
       target: dev
+    networks: *networks
+    extra_hosts: *extra-hosts
     volumes: *volumes
     working_dir: *working-dir
 
@@ -210,6 +264,8 @@ services:
     build:
       context: ../service/php72/cli
       target: debug
+    networks: *networks
+    extra_hosts: *extra-hosts
     volumes: *volumes-t
     working_dir: *working-dir
 
@@ -217,5 +273,7 @@ services:
     build:
       context: ../service/php72/cli
       target: debug
+    networks: *networks
+    extra_hosts: *extra-hosts
     volumes: *volumes-x
     working_dir: *working-dir

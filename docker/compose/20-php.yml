@@ -7,6 +7,7 @@ x-volumes: &volumes
   - "../../bench:/home/vagrant/bench"
   - "~/.bashrc:/home/vagrant/.bashrc"
   - "~/.bash_profile:/home/vagrant/.bash_profile"
+  - "~/.gitconfig:/home/vagrant/.gitconfig"
   - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
   - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
   - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
@@ -17,6 +18,7 @@ x-volumes-t: &volumes-t
   - "../../bench:/home/vagrant/bench"
   - "~/.bashrc:/home/vagrant/.bashrc"
   - "~/.bash_profile:/home/vagrant/.bash_profile"
+  - "~/.gitconfig:/home/vagrant/.gitconfig"
   - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
   - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
   - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
@@ -27,6 +29,7 @@ x-volumes-x: &volumes-x
   - "../../bench:/home/vagrant/bench"
   - "~/.bashrc:/home/vagrant/.bashrc"
   - "~/.bash_profile:/home/vagrant/.bash_profile"
+  - "~/.gitconfig:/home/vagrant/.gitconfig"
   - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
   - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
   - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
@@ -79,6 +82,17 @@ services:
     extra_hosts: *extra-hosts
     volumes: *volumes
     working_dir: *working-dir
+
+
+  php56cow:
+    build:
+      context: ../service/php56/cli
+      target: cow
+    networks: *networks
+    extra_hosts: *extra-hosts
+    volumes: *volumes
+    working_dir: *working-dir
+
 
 
   php56t:
@@ -167,6 +181,15 @@ services:
     volumes: *volumes-t
     working_dir: *working-dir
 
+  php70cow:
+    build:
+      context: ../service/php70/cli
+      target: cow
+    networks: *networks
+    extra_hosts: *extra-hosts
+    volumes: *volumes
+    working_dir: *working-dir
+
   php70x:
     build:
       context: ../service/php70/cli
@@ -218,6 +241,15 @@ services:
     volumes: *volumes-t
     working_dir: *working-dir
 
+  php71cow:
+    build:
+      context: ../service/php71/cli
+      target: cow
+    networks: *networks
+    extra_hosts: *extra-hosts
+    volumes: *volumes
+    working_dir: *working-dir
+
   php71x:
     build:
       context: ../service/php71/cli
@@ -267,6 +299,15 @@ services:
     networks: *networks
     extra_hosts: *extra-hosts
     volumes: *volumes-t
+    working_dir: *working-dir
+
+  php72cow:
+    build:
+      context: ../service/php72/cli
+      target: cow
+    networks: *networks
+    extra_hosts: *extra-hosts
+    volumes: *volumes
     working_dir: *working-dir
 
   php72x:

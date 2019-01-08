@@ -54,3 +54,21 @@ RUN docker-php-source extract \
  && docker-php-source delete
 
 USER vagrant
+
+
+FROM dev as cow
+
+USER root
+
+RUN apt-get update -y \
+  && apt-get install -y python-pip \
+  && pip install transifex-client awscli \
+  && apt-get install -y ruby \
+  && gem install yamlclean
+
+USER vagrant
+
+RUN composer -vvv global require silverstripe/cow:dev-master \
+  && composer -vvv global require composer/satis ^1 \
+  && ln -s /home/vagrant/.composer/vendor/bin/cow /usr/bin/. \
+  && ln -s /home/vagrant/.composer/vendor/bin/satis /usr/bin/.

@@ -30,7 +30,8 @@ CPU_NUM=$(grep processor /proc/cpuinfo | wc -l)
 sudo sysctl net.ipv4.conf.all.forwarding=1
 sudo iptables -P FORWARD ACCEPT
 
-if [ "build" == "$1" ] ; then
+if [[ $@ == "build" ]] ; then
+    echo "Rebuilding everything!";
     # read all service names from the composer configs and print them out one by one for a row
     # then pass it to xargs to perform parallel build for the services
     python -c 'import yaml; import sys; fls=sys.argv[-1]; print("\n".join([item for sublist in [d["services"].keys() for d in [yaml.load(open(f, "r")) for f in fls.split()] if d.has_key("services")] for item in sublist]))' "$CONFIG_FILES" | xargs -P$CPU_NUM -I% -t docker-compose $CONFIGS build % ;

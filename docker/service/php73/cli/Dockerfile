@@ -1,4 +1,4 @@
-FROM php:7.2-cli-stretch as base
+FROM php:7.3-cli-stretch as base
 
 RUN apt-get update -y \
  && apt-get install -y \
@@ -48,7 +48,7 @@ FROM dev as debug
 USER root
 
 RUN docker-php-source extract \
- && yes '' | pecl install xdebug && docker-php-ext-enable xdebug \
+ && yes '' | pecl install xdebug-2.7.0beta1 && docker-php-ext-enable xdebug \
  && docker-php-source delete
 
 USER vagrant
@@ -72,3 +72,7 @@ RUN ln -s /home/vagrant/.composer/vendor/bin/cow /usr/bin/. \
  && ln -s /home/vagrant/.composer/vendor/bin/satis /usr/bin/.
 
 USER vagrant
+
+
+FROM debug as debug-root
+USER root

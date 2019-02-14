@@ -3,7 +3,7 @@ version: '2.4'
 services:
   chrome:
     network_mode: host
-    image: selenoid/chrome
+    image: selenoid/chrome:62.0
     restart: always
     cap_add:
       - ALL

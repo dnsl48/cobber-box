@@ -1,4 +1,4 @@
-FROM php:7.2-cli-stretch as base
+FROM php:7.3-apache-stretch as base
 
 RUN apt-get update -y \
  && apt-get install -y \
@@ -32,43 +32,14 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 RUN groupadd -f -g 1000 vagrant \
  && useradd -g 1000 -d /home/vagrant -m -u 1000 vagrant
 
+RUN a2enmod vhost_alias rewrite
 
-FROM base as dev
-
-RUN apt-get update -y \
- && apt-get install -y git httpie
-
-USER vagrant
-
-RUN mkdir -p /home/vagrant/.composer/cache/vcs/
+ENV APACHE_RUN_USER vagrant
+ENV APACHE_RUN_GROUP vagrant
 
 
-FROM dev as debug
-
-USER root
+FROM base as debug
 
 RUN docker-php-source extract \
- && yes '' | pecl install xdebug && docker-php-ext-enable xdebug \
- && docker-php-source delete
-
-USER vagrant
-
-
-FROM dev as cow
-
-USER root
-RUN apt-get update -y \
- && apt-get install -y python-pip \
- && pip install transifex-client awscli \
- && apt-get install -y ruby \
- && gem install yamlclean
-
-USER vagrant
-RUN composer -vvv global require silverstripe/cow:dev-master \
- && composer -vvv global require composer/satis ^1
-
-USER root
-RUN ln -s /home/vagrant/.composer/vendor/bin/cow /usr/bin/. \
- && ln -s /home/vagrant/.composer/vendor/bin/satis /usr/bin/.
-
-USER vagrant
+  && yes '' | pecl install xdebug-2.7.0beta1 && docker-php-ext-enable xdebug \
+  && docker-php-source delete

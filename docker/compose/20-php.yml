@@ -38,14 +38,14 @@ x-volumes-x: &volumes-x
 
 # Apache
 x-volumes-a: &volumes-a
-  - "../../bench:/var/www/html"
+  - "../../bench:/home/vagrant/bench"
   - "../configs/httpd/sites-enabled:/etc/apache2/sites-enabled"
   - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
   - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
 
 # Apache with xdebug
 x-volumes-ax: &volumes-ax
-  - "../../bench:/var/www/html"
+  - "../../bench:/home/vagrant/bench"
   - "../configs/httpd/sites-enabled:/etc/apache2/sites-enabled"
   - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
   - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
@@ -74,6 +74,8 @@ services:
     extra_hosts: *extra-hosts
 
 
+# ================ PHP 5.6 ================
+
   php56:
     build:
       context: ../service/php56/cli
@@ -92,7 +94,6 @@ services:
     extra_hosts: *extra-hosts
     volumes: *volumes
     working_dir: *working-dir
-
 
 
   php56t:
@@ -137,6 +138,9 @@ services:
     ports:
       - "8561:80"
     volumes: *volumes-ax
+
+
+# ================ PHP 7.0 ================
 
 
   php70a:
@@ -199,6 +203,8 @@ services:
     volumes: *volumes-x
     working_dir: *working-dir
 
+# ================ PHP 7.1 ================
+
   php71a:
     build:
       context: ../service/php71/apache
@@ -259,6 +265,9 @@ services:
     volumes: *volumes-x
     working_dir: *working-dir
 
+
+# ================ PHP 7.2 ================
+
   php72a:
     build:
       context: ../service/php72/apache
@@ -313,6 +322,70 @@ services:
   php72x:
     build:
       context: ../service/php72/cli
+      target: debug
+    networks: *networks
+    extra_hosts: *extra-hosts
+    volumes: *volumes-x
+    working_dir: *working-dir
+
+
+# ================ PHP 7.3 ================
+
+
+  php73a:
+    build:
+      context: ../service/php73/apache
+      target: base
+    networks: *networks
+    extra_hosts: *extra-hosts
+    init: true
+    restart: always
+    ports:
+      - "8730:80"
+    volumes: *volumes-a
+
+  php73ax:
+    build:
+      context: ../service/php73/apache
+      target: debug
+    networks: *networks
+    extra_hosts: *extra-hosts
+    init: true
+    restart: always
+    ports:
+      - "8731:80"
+    volumes: *volumes-ax
+
+  php73:
+    build:
+      context: ../service/php73/cli
+      target: dev
+    networks: *networks
+    extra_hosts: *extra-hosts
+    volumes: *volumes
+    working_dir: *working-dir
+
+  php73t:
+    build:
+      context: ../service/php73/cli
+      target: debug
+    networks: *networks
+    extra_hosts: *extra-hosts
+    volumes: *volumes-t
+    working_dir: *working-dir
+
+  php73cow:
+    build:
+      context: ../service/php73/cli
+      target: cow
+    networks: *networks
+    extra_hosts: *extra-hosts
+    volumes: *volumes
+    working_dir: *working-dir
+
+  php73x:
+    build:
+      context: ../service/php73/cli
       target: debug
     networks: *networks
     extra_hosts: *extra-hosts

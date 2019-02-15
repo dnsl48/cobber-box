@@ -39,6 +39,7 @@ RUN a2enmod vhost_alias rewrite
 ENV APACHE_RUN_USER vagrant
 ENV APACHE_RUN_GROUP vagrant
 
+
 FROM base as debug
 
 RUN docker-php-source extract \

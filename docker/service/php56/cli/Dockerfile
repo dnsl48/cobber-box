@@ -10,8 +10,7 @@ RUN apt-get update -y \
 
 RUN docker-php-source extract \
  && docker-php-ext-install iconv \
- && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
- && docker-php-ext-install gd \
+ && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && docker-php-ext-install gd \
  && docker-php-ext-install intl \
  && docker-php-ext-install zip \
  && docker-php-ext-install mysqli \
@@ -27,12 +26,10 @@ RUN docker-php-source extract \
  && yes '' | pecl install imagick && docker-php-ext-enable imagick \
  && docker-php-source delete
 
-
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
  && php -r "if (hash_file('sha384', 'composer-setup.php') === '$(wget -q -O - https://composer.github.io/installer.sig)') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
  && php composer-setup.php --install-dir=/bin --filename=composer \
  && php -r "unlink('composer-setup.php');"
-
 
 RUN groupadd -f -g 1000 vagrant \
  && useradd -g 1000 -d /home/vagrant -m -u 1000 vagrant

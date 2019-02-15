@@ -1,5 +1,25 @@
 # Troubleshooting
 
+### Filesystem is not responding after I shut down the box through Virtualbox
+
+If you shutdown the server through Virtualbox UI, then your host filesystem may
+try to keep communicating with the NFS server, which is down. You'll have to
+We use `nfs_guest` plugin, which makes the NFS server out of vagrant box and your
+host machine mounts the `bench` folder through NFS.
+
+First you'll need to determine which NFS folders are still mounted on your host
+machine. To do so run the command:
+
+```bash
+mountstats
+```
+
+Then you can manually unmount each folder from the list with the following command:
+
+```bash
+sudo umount -f -l /.../silverbox/bench
+```
+
 ### The filesystem on the host machine becomes slow
 
 If you use nfs, smb or nfs_guest as transport you may start experiencing the filesystem slowing

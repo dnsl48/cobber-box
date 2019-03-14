@@ -2,8 +2,8 @@ ENV["LC_ALL"] = "en_US.UTF-8"
 
 Vagrant.configure("2") do |config|
   config.vm.box = "centos/7"
-  config.vm.hostname = "oss"
-  config.vm.post_up_message = "Open SilverStripe Box is up and running"
+  config.vm.hostname = "silverbox"
+  config.vm.post_up_message = "SilverBox is up and running"
 
   config.ssh.forward_agent = true
 
@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provider "virtualbox" do |vbox|
-    vbox.name = "oss2019-2"
+    vbox.name = "silverbox"
     vbox.cpus = 4
     vbox.memory = 8129
 
@@ -26,10 +26,12 @@ Vagrant.configure("2") do |config|
       unless File.exist?('./bench.vdi')
         vbox.customize ['createmedium', 'disk', '--filename', './bench.vdi', '--variant', 'Standard', '--format', 'VDI', '--size', 120 * 1024]
       end
+      # TODO: detach the image if cmd is `vagrant destroy` as it deletes the storages...
       vbox.customize ['storageattach', :id,  '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', './bench.vdi']
     end
   end
 
+  config.vm.synced_folder ".", "/vagrant", disabled: true
   config.vm.synced_folder '~', '/home/vagrant/host/home'
   config.vm.synced_folder 'docker/', '/home/vagrant/docker'
 

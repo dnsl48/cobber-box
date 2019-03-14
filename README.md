@@ -1,5 +1,33 @@
 # Troubleshooting
 
+
+### `vagrant halt` doesn't seem to work
+If you've been provisioning a new box and cancelled before it finished, you may end up with
+VirtualBox running but without NFS folders mounted yet. At this point `vagrant halt` will try
+to unmount the NFS folders on your host machine before shutting down the vagrant box. If those
+aren't mounted it cannot handle it gracefully and simply refuses to halt the box.
+
+If that's your case, you'll see this message:
+
+```bash
+$ vagrant halt
+==> default: Unmounting NFS shared folders from guest...
+    default: /home/vagrant/bench => /home/serge/workspace/ossbox/bench
+[sudo] password for serge:
+==> default: umount: /home/serge/silverbox/bench: not mounted.
+==> default: Maybe NFS mounts still in use!
+```
+
+At this point you should make sure you don't have the NFS mounted with the mountstats:
+
+```bash
+$ mountstats
+No NFS mount points were found
+```
+
+Then you should be able to safely shut down the box through the VirtualBox UI.
+
+
 ### Filesystem is not responding after I shut down the box through Virtualbox
 
 If you shutdown the server through Virtualbox UI, then your host filesystem may

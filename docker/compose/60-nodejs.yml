@@ -1,5 +1,15 @@
 version: '2.4'
 
+x-volumes: &volumes
+  - "../../bench:/home/vagrant/bench"
+  - "/home/vagrant/.cache/yarn:/home/node/.cache/yarn"
+  - "/home/vagrant/.cache/.npm:/home/node/.cache/npm-cache"
+  - "~/.bashrc:/home/node/.bashrc"
+  - "~/.bash_profile:/home/node/.bash_profile"
+  - "~/.gitconfig:/home/node/.gitconfig"
+
+x-working-dir: &working-dir '/home/vagrant/bench'
+
 
 services:
   node10:
@@ -7,12 +17,8 @@ services:
       context: ../service/node10
       target: dev
 
-    volumes:
-      - "../../bench:/mnt/bench"
-      - "/home/vagrant/.cache/yarn:/home/vagrant/.cache/yarn"
-      - "/home/vagrant/.cache/.npm:/home/vagrant/.cache/npm-cache"
-
-    working_dir: "/mnt"
+    volumes: *volumes
+    working_dir: *working-dir
 
 
   node6:
@@ -20,9 +26,5 @@ services:
       context: ../service/node6
       target: dev
 
-    volumes:
-      - "../../bench:/mnt/bench"
-      - "/home/vagrant/.cache/yarn:/home/vagrant/.cache/yarn"
-      - "/home/vagrant/.cache/.npm:/home/vagrant/.cache/npm-cache"
-
-    working_dir: "/mnt"
+    volumes: *volumes
+    working_dir: *working-dir

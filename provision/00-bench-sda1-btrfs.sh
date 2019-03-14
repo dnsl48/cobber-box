@@ -11,3 +11,8 @@ mount -o compress=lzo /dev/sdb /home/vagrant/bench
 chown vagrant:vagrant /home/vagrant/bench
 
 echo "/dev/sdb  /home/vagrant/bench  btrfs  rw,relatime,compress=lzo,ssd,space_cache  0 0" >> /etc/fstab
+
+systemctl status nfs-server
+if [[ "$?" != "0" ]] ; then
+    systemctl restart nfs-server
+fi

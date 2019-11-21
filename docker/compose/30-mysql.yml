@@ -1,18 +1,18 @@
 version: '2.4'
 
 services:
-  mysql55:
-    image: mysql:5.5
-    env_file:
-      - ../configs/mysql/.env
-    ports:
-      - "3355:3306"
-
-  mysqlcli55:
-    command: "mysql -h mysql55 -uroot"
-    image: mysql:5.5
-    env_file:
-      - ../configs/mysql/.env
+  # mysql55:
+  #   image: mysql:5.5
+  #   env_file:
+  #     - ../configs/mysql/.env
+  #   ports:
+  #     - "3355:3306"
+  #
+  # mysqlcli55:
+  #   command: "mysql -h mysql55 -uroot"
+  #   image: mysql:5.5
+  #   env_file:
+  #     - ../configs/mysql/.env
 
   mysql56:
     image: mysql:5.6

@@ -9,9 +9,10 @@ x-volumes: &volumes
   - "~/.bash_profile:/home/vagrant/.bash_profile"
   - "~/.gitconfig:/home/vagrant/.gitconfig"
   - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
+  - "~/host/home/.composer/auth.json:/home/vagrant/.composer/auth.json"
   - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
   - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
-
+  - "~/host:/host"
 
 # CLI tests (with inactive xdebug)
 x-volumes-t: &volumes-t
@@ -20,9 +21,11 @@ x-volumes-t: &volumes-t
   - "~/.bash_profile:/home/vagrant/.bash_profile"
   - "~/.gitconfig:/home/vagrant/.gitconfig"
   - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
+  - "~/host/home/.composer/auth.json:/home/vagrant/.composer/auth.json"
   - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
   - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
   - "../configs/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
+  - "~/host:/host"
 
 # CLI debug (with active xdebug)
 x-volumes-x: &volumes-x
@@ -31,9 +34,11 @@ x-volumes-x: &volumes-x
   - "~/.bash_profile:/home/vagrant/.bash_profile"
   - "~/.gitconfig:/home/vagrant/.gitconfig"
   - "~/.cache/.composer/cache/:/home/vagrant/.composer/cache/"
+  - "~/host/home/.composer/auth.json:/home/vagrant/.composer/auth.json"
   - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
   - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
   - "../configs/php/xdebug-cli.ini:/usr/local/etc/php/conf.d/xdebug.ini"
+  - "~/host:/host"
 
 
 # Apache
@@ -42,6 +47,7 @@ x-volumes-a: &volumes-a
   - "../configs/httpd/sites-enabled:/etc/apache2/sites-enabled"
   - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
   - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
+  - "~/host:/host"
 
 # Apache with xdebug
 x-volumes-ax: &volumes-ax
@@ -50,6 +56,7 @@ x-volumes-ax: &volumes-ax
   - "../configs/php/php.ini:/usr/local/etc/php/php.ini"
   - "../configs/php/session-memcached.ini:/usr/local/etc/php/conf.d/session-memcached.ini"
   - "../configs/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
+  - "~/host:/host"
 
 
 x-networks: &networks
@@ -75,134 +82,134 @@ services:
     extra_hosts: *extra-hosts
 
 
-# ================ PHP 5.6 ================
-
-  php56:
-    build:
-      context: ../service/php56/cli
-      target: dev
-    networks: *networks
-    extra_hosts: *extra-hosts
-    volumes: *volumes
-    working_dir: *working-dir
-
-
-  php56cow:
-    build:
-      context: ../service/php56/cli
-      target: cow
-    networks: *networks
-    extra_hosts: *extra-hosts
-    volumes: *volumes
-    working_dir: *working-dir
-
-
-  php56t:
-    build:
-      context: ../service/php56/cli
-      target: debug
-    networks: *networks
-    extra_hosts: *extra-hosts
-    volumes: *volumes-t
-    working_dir: *working-dir
-
-
-  php56x:
-    build:
-      context: ../service/php56/cli
-      target: debug
-    networks: *networks
-    extra_hosts: *extra-hosts
-    volumes: *volumes-x
-    working_dir: *working-dir
-
-  php56a:
-    build:
-      context: ../service/php56/apache
-      target: base
-    networks: *networks
-    extra_hosts: *extra-hosts
-    init: true
-    restart: always
-    ports:
-      - "8560:80"
-    volumes: *volumes-a
-
-  php56ax:
-    build:
-      context: ../service/php56/apache
-      target: debug
-    networks: *networks
-    extra_hosts: *extra-hosts
-    init: true
-    restart: always
-    ports:
-      - "8561:80"
-    volumes: *volumes-ax
-
-
-# ================ PHP 7.0 ================
-
-
-  php70a:
-    build:
-      context: ../service/php70/apache
-      target: base
-    networks: *networks
-    extra_hosts: *extra-hosts
-    init: true
-    restart: always
-    ports:
-      - "8700:80"
-    volumes: *volumes-a
-
-  php70ax:
-    build:
-      context: ../service/php70/apache
-      target: debug
-    networks: *networks
-    extra_hosts: *extra-hosts
-    init: true
-    restart: always
-    ports:
-      - "8701:80"
-    volumes: *volumes-ax
-
-  php70:
-    build:
-      context: ../service/php70/cli
-      target: dev
-    networks: *networks
-    extra_hosts: *extra-hosts
-    volumes: *volumes
-    working_dir: *working-dir
-
-  php70t:
-    build:
-      context: ../service/php70/cli
-      target: debug
-    networks: *networks
-    extra_hosts: *extra-hosts
-    volumes: *volumes-t
-    working_dir: *working-dir
-
-  php70cow:
-    build:
-      context: ../service/php70/cli
-      target: cow
-    networks: *networks
-    extra_hosts: *extra-hosts
-    volumes: *volumes
-    working_dir: *working-dir
-
-  php70x:
-    build:
-      context: ../service/php70/cli
-      target: debug
-    networks: *networks
-    extra_hosts: *extra-hosts
-    volumes: *volumes-x
-    working_dir: *working-dir
+# # ================ PHP 5.6 ================
+#
+#   php56:
+#     build:
+#       context: ../service/php56/cli
+#       target: dev
+#     networks: *networks
+#     extra_hosts: *extra-hosts
+#     volumes: *volumes
+#     working_dir: *working-dir
+#
+#
+#   php56cow:
+#     build:
+#       context: ../service/php56/cli
+#       target: cow
+#     networks: *networks
+#     extra_hosts: *extra-hosts
+#     volumes: *volumes
+#     working_dir: *working-dir
+#
+#
+#   php56t:
+#     build:
+#       context: ../service/php56/cli
+#       target: debug
+#     networks: *networks
+#     extra_hosts: *extra-hosts
+#     volumes: *volumes-t
+#     working_dir: *working-dir
+#
+#
+#   php56x:
+#     build:
+#       context: ../service/php56/cli
+#       target: debug
+#     networks: *networks
+#     extra_hosts: *extra-hosts
+#     volumes: *volumes-x
+#     working_dir: *working-dir
+#
+#   php56a:
+#     build:
+#       context: ../service/php56/apache
+#       target: base
+#     networks: *networks
+#     extra_hosts: *extra-hosts
+#     init: true
+#     restart: always
+#     ports:
+#       - "8560:80"
+#     volumes: *volumes-a
+#
+#   php56ax:
+#     build:
+#       context: ../service/php56/apache
+#       target: debug
+#     networks: *networks
+#     extra_hosts: *extra-hosts
+#     init: true
+#     restart: always
+#     ports:
+#       - "8561:80"
+#     volumes: *volumes-ax
+#
+#
+# # ================ PHP 7.0 ================
+#
+#
+#   php70a:
+#     build:
+#       context: ../service/php70/apache
+#       target: base
+#     networks: *networks
+#     extra_hosts: *extra-hosts
+#     init: true
+#     restart: always
+#     ports:
+#       - "8700:80"
+#     volumes: *volumes-a
+#
+#   php70ax:
+#     build:
+#       context: ../service/php70/apache
+#       target: debug
+#     networks: *networks
+#     extra_hosts: *extra-hosts
+#     init: true
+#     restart: always
+#     ports:
+#       - "8701:80"
+#     volumes: *volumes-ax
+#
+#   php70:
+#     build:
+#       context: ../service/php70/cli
+#       target: dev
+#     networks: *networks
+#     extra_hosts: *extra-hosts
+#     volumes: *volumes
+#     working_dir: *working-dir
+#
+#   php70t:
+#     build:
+#       context: ../service/php70/cli
+#       target: debug
+#     networks: *networks
+#     extra_hosts: *extra-hosts
+#     volumes: *volumes-t
+#     working_dir: *working-dir
+#
+#   php70cow:
+#     build:
+#       context: ../service/php70/cli
+#       target: cow
+#     networks: *networks
+#     extra_hosts: *extra-hosts
+#     volumes: *volumes
+#     working_dir: *working-dir
+#
+#   php70x:
+#     build:
+#       context: ../service/php70/cli
+#       target: debug
+#     networks: *networks
+#     extra_hosts: *extra-hosts
+#     volumes: *volumes-x
+#     working_dir: *working-dir
 
 # ================ PHP 7.1 ================
 

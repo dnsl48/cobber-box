@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
   config.ssh.forward_agent = true
 
   config.vagrant.plugins = { "vagrant-nfs_guest" => { "version" => "1.0.0" },   ## 1.0.2 and 1.0.3 are buggy and do not work on CentOS
-                             "vagrant-vbguest" => { "version" => "0.17.2" },
+                             # "vagrant-vbguest" => { "version" => "0.17.2" },
                            }
 
   if Vagrant.has_plugin? "vagrant-nfs_guest"
@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vbox|
     vbox.name = "silverbox"
     vbox.cpus = 4
-    vbox.memory = 8129
+    vbox.memory = 6144
 
     if BENCH_MOUNT_TYPE == 'nfs_guest' then
       unless File.exist?('./bench.vdi')

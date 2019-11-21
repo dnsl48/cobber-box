@@ -1,11 +1,11 @@
 version: '2.4'
 
 services:
-  mariadb55:
-    image: mariadb:5.5
-    restart: always
-    env_file:
-      - ../configs/mysql/.env
+  # mariadb55:
+  #   image: mariadb:5.5
+  #   restart: always
+  #   env_file:
+  #     - ../configs/mysql/.env
 
   macli55:
     command: "mysql -h mysql55 -uroot"
@@ -13,14 +13,14 @@ services:
     env_file:
       - ../configs/mysql/.env
 
-  mariadb104:
-    image: mariadb:10.4
-    restart: always
-    env_file:
-      - ../configs/mysql/.env
-
-  mariadb100:
-    image: mariadb:10.0
-    restart: always
-    env_file:
-      - ../configs/mysql/.env
+  # mariadb104:
+  #   image: mariadb:10.4
+  #   restart: always
+  #   env_file:
+  #     - ../configs/mysql/.env
+  #
+  # mariadb100:
+  #   image: mariadb:10.0
+  #   restart: always
+  #   env_file:
+  #     - ../configs/mysql/.env

@@ -7,6 +7,8 @@ services:
     restart: always
     cap_add:
       - ALL
+    volumes:
+      - "../../bench:/home/vagrant/bench"
 
   # firefox:
   #   network_mode: host

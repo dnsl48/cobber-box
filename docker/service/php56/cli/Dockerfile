@@ -15,6 +15,9 @@ RUN docker-php-source extract \
  && docker-php-ext-install zip \
  && docker-php-ext-install mysqli \
  && docker-php-ext-install pgsql \
+ && docker-php-ext-install pdo \
+ && docker-php-ext-install pdo_mysql \
+ && docker-php-ext-install pdo_pgsql \
  && docker-php-ext-install tidy \
  && docker-php-ext-install exif \
  && docker-php-ext-install bcmath \

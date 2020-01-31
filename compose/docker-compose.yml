@@ -1,0 +1,88 @@
+version: '3.7'
+
+x-build-args: &build-args
+  UID: ${USER_ID}
+
+x-volumes: &volumes
+  - ../..:/app'
+  - '${APP_DIR}:${APP_DIR}'
+  - '../config/httpd/sites-enabled:/etc/apache2/sites-enabled'
+  - '../config/httpd/ports.conf:/etc/apache2/ports.conf'
+  - '../config/php/php.ini:/usr/local/etc/php/php.ini'
+  - '../config/php/xdebug.ini:/usr/local/etc/php/xdebug.ini'
+
+x-environment: &environment
+  APACHE_DOCUMENT_ROOT: ${APP_DIR}
+  XDEBUG_HOST: ${XDEBUG_HOST}
+  XDEBUG_PORT: ${XDEBUG_PORT}
+
+services:
+  apache:
+    &apache
+    build:
+      context: ../service/php-7.3/apache
+      target: apache
+      args: *build-args
+    network_mode: 'host'
+    init: true
+    restart: always
+    volumes: *volumes
+    environment: *environment
+    depends_on:
+      - mysql
+
+  apache-xdebug:
+    <<: *apache
+    build:
+      context: ../service/php-7.3/apache
+      target: debug
+      args: *build-args
+
+
+  php-cli:
+    &php-cli
+    build:
+      context: ../service/php-7.3/cli
+      target: cli
+      args: *build-args
+    network_mode: 'host'
+    init: true
+    restart: always
+    volumes: *volumes
+    environment: *environment
+
+  php-cli-xdebug:
+    <<: *php-cli
+    build:
+      context: ../service/php-7.3/cli
+      target: debug
+      args: *build-args
+
+
+  mysql:
+    image: mysql:5.6
+    env_file:
+      - ../config/mysql/env
+    restart: always
+    network_mode: 'host'
+
+  mysql-cli:
+    image: mysql:5.6
+    env_file:
+      - ../config/mysql/env
+      - ../../.env
+    restart: always
+    network_mode: 'host'
+    command: 'bash -c "mysql -h 127.0.0.1 -uroot -D $$(echo $$SS_DATABASE_NAME | xargs)"'
+
+  # Build a new local image WITH XDebug and run localhost version of COW in there
+  # debug:
+  #   build:
+  #     context: *build-context
+  #     target: debug
+  #     args: *build-args
+  #   working_dir: *wdir
+  #   network_mode: 'host'
+  #   volumes: *volumes
+  #   entrypoint: *entrypoint
+  #   environment: *environment

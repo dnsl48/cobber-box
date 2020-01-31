@@ -9,12 +9,12 @@ x-volumes: &volumes
   - '../config/httpd/sites-enabled:/etc/apache2/sites-enabled'
   - '../config/httpd/ports.conf:/etc/apache2/ports.conf'
   - '../config/php/php.ini:/usr/local/etc/php/php.ini'
-  - '../config/php/xdebug.ini:/usr/local/etc/php/xdebug.ini'
+
+x-debug-env-var: &x-debug-env-var 'remote_enable=1 remote_mode=req remote_port=${XDEBUG_PORT} remote_host=${XDEBUG_HOST} remote_connect_back=0'
 
 x-environment: &environment
   APACHE_DOCUMENT_ROOT: ${APP_DIR}
-  XDEBUG_HOST: ${XDEBUG_HOST}
-  XDEBUG_PORT: ${XDEBUG_PORT}
+  XDEBUG_CONFIG: *x-debug-env-var
 
 services:
   apache:

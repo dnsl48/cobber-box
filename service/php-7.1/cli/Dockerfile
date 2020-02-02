@@ -50,10 +50,14 @@ RUN groupadd -f -g $GID zoey \
 
 FROM zoey as cli
 
+COPY --chown=zoey:zoey entrypoint.sh /entrypoint.sh
+
 RUN apt-get update -y \
  && apt-get install -y git httpie
 
 USER zoey
+
+ENTRYPOINT [ "/entrypoint.sh" ]
 
 
 

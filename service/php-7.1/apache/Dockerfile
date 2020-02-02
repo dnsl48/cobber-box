@@ -1,4 +1,4 @@
-FROM php:7.3-cli-stretch as base
+FROM php:7.1-apache-stretch as base
 
 RUN apt-get update -y \
  && apt-get install -y \
@@ -36,8 +36,6 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
  && php composer-setup.php --install-dir=/bin --filename=composer \
  && php -r "unlink('composer-setup.php');"
 
-
-
 FROM base as zoey
 
 ARG UID=1000
@@ -47,20 +45,17 @@ RUN groupadd -f -g $GID zoey \
  && useradd -g $GID -d /home/zoey -m -u $UID zoey
 
 
+FROM zoey as apache
 
-FROM zoey as cli
+RUN a2enmod vhost_alias rewrite
 
-RUN apt-get update -y \
- && apt-get install -y git httpie
-
-USER zoey
-
+ENV APACHE_RUN_USER zoey
+ENV APACHE_RUN_GROUP zoey
+ENV APACHE_DOCUMENT_ROOT /app
 
 
-FROM cli as debug
+FROM apache as debug
 
-USER root
 RUN docker-php-source extract \
- && yes '' | pecl install xdebug-2.7.0beta1 && docker-php-ext-enable xdebug \
+ && yes '' | pecl install xdebug && docker-php-ext-enable xdebug \
  && docker-php-source delete
-USER zoey

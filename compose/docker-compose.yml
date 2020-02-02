@@ -17,10 +17,11 @@ x-environment: &environment
   XDEBUG_CONFIG: *x-debug-env-var
 
 services:
+  # Apache
   apache:
     &apache
     build:
-      context: ../service/php-7.3/apache
+      context: ../service/php-7.1/apache
       target: apache
       args: *build-args
     network_mode: 'host'
@@ -34,15 +35,16 @@ services:
   apache-xdebug:
     <<: *apache
     build:
-      context: ../service/php-7.3/apache
+      context: ../service/php-7.1/apache
       target: debug
       args: *build-args
 
 
+  # PHP CLI
   php-cli:
     &php-cli
     build:
-      context: ../service/php-7.3/cli
+      context: ../service/php-7.1/cli
       target: cli
       args: *build-args
     network_mode: 'host'
@@ -54,11 +56,12 @@ services:
   php-cli-xdebug:
     <<: *php-cli
     build:
-      context: ../service/php-7.3/cli
+      context: ../service/php-7.1/cli
       target: debug
       args: *build-args
 
 
+  # MySQL
   mysql:
     image: mysql:5.6
     env_file:
@@ -74,15 +77,3 @@ services:
     restart: always
     network_mode: 'host'
     command: 'bash -c "mysql -h 127.0.0.1 -uroot -D $$(echo $$SS_DATABASE_NAME | xargs)"'
-
-  # Build a new local image WITH XDebug and run localhost version of COW in there
-  # debug:
-  #   build:
-  #     context: *build-context
-  #     target: debug
-  #     args: *build-args
-  #   working_dir: *wdir
-  #   network_mode: 'host'
-  #   volumes: *volumes
-  #   entrypoint: *entrypoint
-  #   environment: *environment

@@ -6,5 +6,4 @@ function _realpath() { python -c 'import sys; from os.path import realpath; prin
 
 . "$(_dirname $(_realpath "$0"))/_init"
 
-
 docker_compose_run mysql-cli $@

@@ -9,6 +9,7 @@ x-volumes: &volumes
   - '../config/httpd/sites-enabled:/etc/apache2/sites-enabled'
   - '../config/httpd/ports.conf:/etc/apache2/ports.conf'
   - '../config/php/php.ini:/usr/local/etc/php/php.ini'
+  - '../service/php/cli-entrypoint.sh:/home/zoey/cli-entrypoint.sh'
 
 x-debug-env-var: &x-debug-env-var 'remote_enable=1 remote_mode=req remote_port=${XDEBUG_PORT} remote_host=${XDEBUG_HOST} remote_connect_back=0'
 
@@ -21,7 +22,7 @@ services:
   apache:
     &apache
     build:
-      context: ../service/php-7.1/apache
+      context: ../service/php/7.1/apache
       target: apache
       args: *build-args
     network_mode: 'host'
@@ -35,7 +36,7 @@ services:
   apache-xdebug:
     <<: *apache
     build:
-      context: ../service/php-7.1/apache
+      context: ../service/php/7.1/apache
       target: debug
       args: *build-args
 
@@ -44,7 +45,7 @@ services:
   php-cli:
     &php-cli
     build:
-      context: ../service/php-7.1/cli
+      context: ../service/php/7.1/cli
       target: cli
       args: *build-args
     network_mode: 'host'
@@ -52,11 +53,12 @@ services:
     restart: always
     volumes: *volumes
     environment: *environment
+    entrypoint: /home/zoey/cli-entrypoint.sh
 
   php-cli-xdebug:
     <<: *php-cli
     build:
-      context: ../service/php-7.1/cli
+      context: ../service/php/7.1/cli
       target: debug
       args: *build-args
 

@@ -5,7 +5,7 @@ function _dirname() { python -c 'import sys; from os.path import realpath, dirna
 function _realpath() { python -c 'import sys; from os.path import realpath; print(realpath(sys.argv[-1]))' $@ ; }
 
 SKIP_RUN_EXEC="1"
-. "$(_dirname $(_realpath -f "$0"))/run"
+. "$(_dirname $(_realpath -f "$0"))/_init"
 
-EXTRA_FLAGS="-e APP_MODE_DEBUG=1 -e APP_MODE_PHPCS=1"
-docker_compose_run cli $@
+EXTRA_FLAGS="-e ENTRY_PHPCS=1"
+docker_compose_run php-cli $@

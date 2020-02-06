@@ -6,5 +6,5 @@ function _realpath() { python -c 'import sys; from os.path import realpath; prin
 
 . "$(_dirname $(_realpath "$0"))/_init"
 
-EXTRA_FLAGS="-v $DOCKER_DIR/service/php-7.1/cli/entrypoint.sh:/entrypoint.sh -e RUN_MODE_TEST=1"
+EXTRA_FLAGS="-e ENTRY_PHPUNIT=1"
 docker_compose_run php-cli-xdebug $@

@@ -8,7 +8,7 @@ fi
 
 if [ ! -z "$ENTRY_PHPCS" ] ; then
     cd $APP_DIR;
-    ./vendor/bin/phpcs $@
+    ./vendor/bin/phpcs -p $@
     exit;
 fi
 

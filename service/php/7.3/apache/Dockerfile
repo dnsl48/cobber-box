@@ -47,7 +47,8 @@ RUN groupadd -f -g $GID zoey \
 
 FROM zoey as apache
 
-RUN a2enmod vhost_alias rewrite
+RUN a2enmod vhost_alias rewrite \
+ && a2enmod ssl
 
 ENV APACHE_RUN_USER zoey
 ENV APACHE_RUN_GROUP zoey

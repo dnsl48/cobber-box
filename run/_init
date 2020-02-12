@@ -10,7 +10,7 @@ export USER_ID=$(id -u)
 export GROUP_ID=$(id -g)
 
 export CUR_FILE=$(_realpath "$0")  # abs path of this script
-export BIN_DIR=$(_dirname $CUR_FILE)  # abs path to the docker/bin folder
+export BIN_DIR=$(_dirname $CUR_FILE)  # abs path to the docker/run folder
 export DOCKER_DIR=$(_dirname $BIN_DIR) # abs path to the docker folder
 export APP_DIR=$(_dirname $DOCKER_DIR)   # abs path to the application root folder
 
